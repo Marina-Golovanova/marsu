@@ -1,0 +1,67 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  background-color: #cf1218;
+  padding: 0 40px;
+  overflow: hidden;
+}
+
+.logo {
+  font-family: "Estonia", cursive;
+  font-size: 60px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #fff;
+  line-height: 41px;
+}
+
+.authorization {
+  display: flex;
+  overflow: hidden;
+  border-radius: 50px;
+
+  button {
+    border-radius: 50px;
+    background-color: inherit;
+    border: none;
+  }
+}
+
+.authorizationItems {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #fff;
+  padding: 0 60px 0 30px;
+  margin-right: -28px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  transition: 0.2s;
+  transform-origin: right center;
+  transform: translateX(100%);
+  opacity: 0;
+
+  li {
+    font-size: 20px;
+    cursor: pointer;
+    color: #000080;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.authorizationItemsActive {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.logIn {
+  background-color: #cf1218;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
