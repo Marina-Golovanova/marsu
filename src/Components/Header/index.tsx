@@ -31,13 +31,7 @@ export const Header: React.FC = React.memo(() => {
           </li>
         </ul>
 
-        <button
-          onClick={() =>
-            setIsAuthorizationOpened(
-              (isAuthorizationOpened) => !isAuthorizationOpened
-            )
-          }
-        >
+        <button onClick={() => setIsAuthorizationOpened((x) => !x)}>
           <FontAwesomeIcon
             className={styles.logIn}
             icon={faUserCircle}
