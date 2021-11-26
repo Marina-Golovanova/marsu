@@ -5,8 +5,9 @@ import cn from "classnames";
 
 import styles from "./styles.module.scss";
 
-export const Header: React.FC = () => {
-  const [isAuthorizationOpen, setIsAuthorizationOpen] = React.useState(false);
+export const Header: React.FC = React.memo(() => {
+  const [isAuthorizationOpened, setIsAuthorizationOpened] =
+    React.useState(false);
 
   return (
     <header className={styles.header}>
@@ -15,14 +16,28 @@ export const Header: React.FC = () => {
       <div className={styles.authorization}>
         <ul
           className={cn(styles.authorizationItems, {
-            [styles.authorizationItemsActive]: isAuthorizationOpen,
+            [styles.authorizationItemsActive]: isAuthorizationOpened,
           })}
         >
-          <li>Регистрация</li>
-          <li>Вход</li>
+          <li>
+            <a tabIndex={isAuthorizationOpened ? 0 : -1} href="/">
+              Регистрация
+            </a>
+          </li>
+          <li>
+            <a tabIndex={isAuthorizationOpened ? 0 : -1} href="/">
+              Вход
+            </a>
+          </li>
         </ul>
 
-        <button onClick={() => setIsAuthorizationOpen(!isAuthorizationOpen)}>
+        <button
+          onClick={() =>
+            setIsAuthorizationOpened(
+              (isAuthorizationOpened) => !isAuthorizationOpened
+            )
+          }
+        >
           <FontAwesomeIcon
             className={styles.logIn}
             icon={faUserCircle}
@@ -35,4 +50,4 @@ export const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+});

@@ -10,12 +10,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -23,4 +20,15 @@ code {
 
 li {
   list-style: none;
+}
+
+button {
+  border: none;
+}
+
+:root {
+  --main-bg-color: #cf1218;
+  --first-lt-color: #000;
+  --second-lt-color: #fff;
+  --link-color: #000080;
 }
