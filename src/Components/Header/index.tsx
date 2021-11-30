@@ -5,7 +5,7 @@ import cn from "classnames";
 
 import styles from "./styles.module.scss";
 
-export const Header: React.FC = React.memo(() => {
+export const Header: React.FC = React.memo(function Header() {
   const [isAuthorizationOpened, setIsAuthorizationOpened] =
     React.useState(false);
 

@@ -8,7 +8,7 @@ type IMenuTree = {
   item: IMenuItem;
   title: string;
   children: IMenuTree[];
-  icon?: object;
+  icon?: React.ReactElement;
 };
 
 const menuItems: IMenuTree[] = [
@@ -26,7 +26,7 @@ const menuItems: IMenuTree[] = [
   },
   {
     item: "statistics",
-    title: "старистика",
+    title: "статистика",
     children: [],
     icon: <DatabaseOutlined />,
   },
@@ -34,17 +34,21 @@ const menuItems: IMenuTree[] = [
 
 const { SubMenu } = MenuPanel;
 
-export const Menu: React.FC = () => {
+export const Menu: React.FC = React.memo(function Menu() {
   const [openKeys, setOpenKeys] = React.useState<string[]>([menuItems[0].item]);
 
-  const onOpenChange = (keys: string[]) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-    if (latestOpenKey) {
-      setOpenKeys([latestOpenKey]);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
+  const onOpenChange = React.useCallback(
+    (keys: string[]) => {
+      const latestOpenKey = keys.find((key) => !openKeys.includes(key));
+      if (latestOpenKey) {
+        setOpenKeys([latestOpenKey]);
+      } else {
+        setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+      }
+    },
+    [openKeys]
+  );
+
   return (
     <MenuPanel
       mode="inline"
@@ -52,21 +56,19 @@ export const Menu: React.FC = () => {
       onOpenChange={onOpenChange}
       style={{ width: 256 }}
     >
-      {menuItems.map((el) => (
-        <>
-          {el.children.length ? (
-            <SubMenu key={el.item} icon={el.icon} title={el.title}>
-              {el.children.map((it) => (
-                <MenuPanel.Item key={it.item}>{it.title}</MenuPanel.Item>
-              ))}
-            </SubMenu>
-          ) : (
-            <MenuPanel.Item key={el.item} icon={el.icon}>
-              {el.title}
-            </MenuPanel.Item>
-          )}
-        </>
-      ))}
+      {menuItems.map((el) =>
+        el.children.length ? (
+          <SubMenu key={el.item} icon={el.icon} title={el.title}>
+            {el.children.map((it) => (
+              <MenuPanel.Item key={it.item}>{it.title}</MenuPanel.Item>
+            ))}
+          </SubMenu>
+        ) : (
+          <MenuPanel.Item key={el.item} icon={el.icon}>
+            {el.title}
+          </MenuPanel.Item>
+        )
+      )}
     </MenuPanel>
   );
-};
+});
