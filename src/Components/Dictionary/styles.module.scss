@@ -1,0 +1,7 @@
+.dictionary {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
+  gap: 15px;
+  margin: 15px 0 0 15px;
+}

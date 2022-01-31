@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  // height: 60px;
+  grid-area: hd;
   background-color: var(--main-bg-color);
   padding: 0 40px;
 }
@@ -25,6 +26,7 @@
   button {
     border-radius: 50px;
     background-color: inherit;
+    height: 42px;
   }
 }
 
@@ -40,6 +42,7 @@
   transform-origin: right center;
   transform: translateX(100%);
   opacity: 0;
+  margin-bottom: 0;
 
   li {
     font-size: 20px;

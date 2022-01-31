@@ -4,6 +4,7 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";
 
 import styles from "./styles.module.scss";
+import { Link } from "react-router-dom";
 
 export const Header: React.FC = React.memo(function Header() {
   const [isAuthorizationOpened, setIsAuthorizationOpened] =
@@ -11,7 +12,9 @@ export const Header: React.FC = React.memo(function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>Marsú</div>
+      <Link to="/">
+        <div className={styles.logo}>Marsú</div>
+      </Link>
 
       <div className={styles.authorization}>
         <ul
