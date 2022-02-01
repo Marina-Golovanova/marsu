@@ -15,44 +15,47 @@ export const CardCategory: React.FC<ICardCategoryProps> = React.memo(
 
     const inputRef = React.useRef<Input>(null);
 
-    const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newName = e.target.value;
-      if (newName) {
-        setName(newName);
-        setIsNeedEdit(false);
-      } else {
-        setIsNeedEdit(false);
-      }
-    };
+    const handleBlur = React.useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newName = e.target.value;
+        if (newName) {
+          setName(newName);
+          setIsNeedEdit(false);
+        } else {
+          setIsNeedEdit(false);
+        }
+      },
+      []
+    );
 
-    const handleEnterPress = (e: React.KeyboardEvent) => {
+    const handleEnterPress = React.useCallback((e: React.KeyboardEvent) => {
       if (e.key === "Enter") {
         (e.target as HTMLInputElement).blur();
       }
-    };
+    }, []);
 
-    const handleClickEdit = () => {
+    const handleClickEdit = React.useCallback(() => {
       setIsNeedEdit(true);
-      setTimeout(() => inputRef.current?.input.focus());
-    };
+      requestAnimationFrame(() => inputRef.current?.input.focus());
+    }, []);
 
-    const handleClickDelete = () => {
+    const handleClickDelete = React.useCallback(() => {
       setIsModalVisible(true);
-    };
+    }, []);
 
-    const handleDeleteCategory = () => {
+    const handleDeleteCategory = React.useCallback(() => {
       //!!!TODO to delete category
       setIsModalVisible(false);
-    };
+    }, []);
+
+    const actions = [
+      <EditOutlined key="edit" onClick={handleClickEdit} />,
+      <DeleteOutlined key="delete" onClick={handleClickDelete} />,
+    ];
 
     return (
       <>
-        <Card
-          actions={[
-            <EditOutlined key="edit" onClick={handleClickEdit} />,
-            <DeleteOutlined key="delete" onClick={handleClickDelete} />,
-          ]}
-        >
+        <Card actions={actions}>
           {isNeedEdit ? (
             <Input
               ref={inputRef}
