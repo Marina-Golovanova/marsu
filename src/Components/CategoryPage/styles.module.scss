@@ -1,0 +1,14 @@
+.category {
+  grid-area: main;
+  margin-top: 15px;
+}
+
+.word {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table {
+  padding: 20px;
+}
