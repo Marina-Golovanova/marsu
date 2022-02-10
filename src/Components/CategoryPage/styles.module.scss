@@ -6,9 +6,15 @@
 .word {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .table {
   padding: 20px;
+}
+
+.cell {
+  max-width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
