@@ -3,6 +3,9 @@ import { Card, Input, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import Meta from "antd/lib/card/Meta";
 
+import styles from "./styles.module.scss";
+import { NavLink } from "react-router-dom";
+
 type ICardCategoryProps = {
   name: string;
 };
@@ -64,7 +67,9 @@ export const CardCategory: React.FC<ICardCategoryProps> = React.memo(
               onKeyPress={handleEnterPress}
             />
           ) : (
-            <Meta title={name} />
+            <NavLink to={`${name.toLowerCase()}`} className={styles.title}>
+              <Meta title={name} />
+            </NavLink>
           )}
         </Card>
         <Modal
