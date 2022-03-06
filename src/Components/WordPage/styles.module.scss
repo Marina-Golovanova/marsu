@@ -1,0 +1,32 @@
+.wordPage {
+  grid-area: main;
+}
+
+.wordInfo {
+  margin: 0 20px;
+
+  > * {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #dddddd;
+    font-size: 1.2em;
+  }
+}
+
+.pos {
+  color: #575757;
+  font-style: italic;
+}
+
+.rowTitle {
+  font-style: italic;
+  color: #550000;
+  min-width: 150px;
+}
+
+.img {
+  width: 600px;
+  margin: 20px;
+}

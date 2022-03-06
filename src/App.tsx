@@ -6,6 +6,7 @@ import { Main } from "./Components/Main";
 import { Layout } from "./Components/Layout";
 import { Dictionary } from "./Components/Dictionary";
 import { CategoryPage } from "./Components/CategoryPage";
+import { WordPage } from "./Components/WordPage";
 
 export const App: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<Main />} />
           <Route path="/dictionary" element={<Dictionary />} />
           <Route path="/dictionary/:name" element={<CategoryPage />} />
-          <Route path="/dictionary/:name/:word" element={<div>word</div>} />
+          <Route path="/dictionary/:name/:word" element={<WordPage />} />
         </Routes>
       </Layout>
     </Router>
