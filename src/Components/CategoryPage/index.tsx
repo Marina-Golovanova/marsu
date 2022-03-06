@@ -1,11 +1,13 @@
 import { Button, Input, Modal, PageHeader, Table } from "antd";
 import React from "react";
 import styles from "./styles.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SoundOutlined } from "@ant-design/icons";
 import { getNewWord } from "../../utils/getNewWord";
 import { EditableCell } from "./EditableCell";
 import { IColKey, ICols } from "../types";
+import { capitalize } from "../../utils/capitalize";
+import { voice } from "../../utils/voice";
 
 export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -13,15 +15,9 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   const inputRef = React.useRef<Input>(null);
   const navigate = useNavigate();
 
-  const [isEmptyValue, setIsEmptyValue] = React.useState(true);
+  const title = capitalize(useParams().name || "");
 
-  const voice = React.useCallback((text: string) => {
-    const reactivate = window.speechSynthesis;
-    const word = new SpeechSynthesisUtterance();
-    word.lang = "es-ES";
-    word.text = text;
-    reactivate.speak(word);
-  }, []);
+  const [isEmptyValue, setIsEmptyValue] = React.useState(true);
 
   const [dataSource, setDateSource] = React.useState<ICols[]>([
     {
@@ -167,7 +163,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   return (
     <div className={styles.category}>
       <PageHeader
-        title="Title"
+        title={title}
         onBack={() => navigate(-1)}
         extra={[
           <Button
