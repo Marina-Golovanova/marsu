@@ -3,11 +3,17 @@ import React from "react";
 import styles from "./styles.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { SoundOutlined } from "@ant-design/icons";
-import { getNewWord } from "../../utils/getNewWord";
 import { EditableCell } from "./EditableCell";
 import { IColKey, ICols } from "../types";
 import { capitalize } from "../../utils/capitalize";
 import { voice } from "../../utils/voice";
+import {
+  selectWords,
+  addNewWord,
+  updateWord,
+  wordSlice,
+} from "../redux/wordSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks";
 
 export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -19,14 +25,9 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
 
   const [isEmptyValue, setIsEmptyValue] = React.useState(true);
 
-  const [dataSource, setDateSource] = React.useState<ICols[]>([
-    {
-      key: "madre",
-      word: "madre",
-      transcription: "<ˈmaðɾe>",
-      translation: "мать",
-    },
-  ]);
+  const dataSource = useAppSelector(selectWords);
+
+  const dispatch = useAppDispatch();
 
   const columns = [
     {
@@ -48,40 +49,36 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
       title: "Транскрипция",
       dataIndex: "transcription",
       key: "transcription",
-      render: (text: string, record: ICols) => {
-        return (
-          <div className={styles.word}>
-            <EditableCell
-              text={text}
-              getWord={(val) =>
-                handleUpdateWord(record.key, "transcription", val)
-              }
-            />
-          </div>
-        );
-      },
+      render: (text: string, record: ICols) => (
+        <div className={styles.word}>
+          <EditableCell
+            text={text}
+            getWord={(val) =>
+              handleUpdateWord(record.key, "transcription", val)
+            }
+          />
+        </div>
+      ),
     },
     {
       title: "Перевод",
       dataIndex: "translation",
       key: "translation",
-      render: (text: string, record: ICols) => {
-        return (
-          <div className={styles.word}>
-            <EditableCell
-              text={text}
-              getWord={(val) =>
-                handleUpdateWord(record.key, "translation", val)
-              }
-            />
-          </div>
-        );
-      },
+      render: (text: string, record: ICols) => (
+        <div className={styles.word}>
+          <EditableCell
+            text={text}
+            getWord={(val) =>
+              handleUpdateWord(record.key, "translationes", val)
+            }
+          />
+        </div>
+      ),
     },
   ];
 
   const handleAddWord = React.useCallback(
-    async (value: string) => {
+    (value: string) => {
       if (value) {
         const dataHasWord = dataSource.filter((el) => el.word === value).length;
         if (dataHasWord) {
@@ -89,76 +86,31 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
           inputRef.current?.setValue("");
         } else {
           setPopatTitle("Введите слово");
-          getNewWord(value)
-            .then((res) => {
-              setDateSource(
-                dataSource.concat({
-                  key: value,
-                  word: value,
-                  transcription: res.transcription,
-                  translation: res.translation,
-                })
-              );
-            })
-            .catch(() =>
-              setDateSource(
-                dataSource.concat({
-                  key: value,
-                  word: value,
-                  transcription: "",
-                  translation: "",
-                })
-              )
-            );
+          dispatch(addNewWord(value));
           inputRef.current?.setValue("");
         }
       }
     },
-    [dataSource]
+    [dataSource, dispatch]
   );
 
   const handleUpdateWord = React.useCallback(
     (key: string, col: IColKey, value: string) => {
       if (col === "word") {
-        getNewWord(value)
-          .then((res) => {
-            setDateSource(
-              dataSource.map((el) =>
-                el.key === key
-                  ? {
-                      key: value,
-                      word: value,
-                      transcription: res.transcription,
-                      translation: res.translation,
-                    }
-                  : el
-              )
-            );
-          })
-          .catch(() =>
-            setDateSource(
-              dataSource.map((el) =>
-                el.key === key
-                  ? {
-                      key: value,
-                      word: value,
-                      transcription: "",
-                      translation: "",
-                    }
-                  : el
-              )
-            )
-          );
+        dispatch(updateWord({ prev: key, new: value }));
       } else {
-        setDateSource(
-          dataSource.map((el) =>
-            el.key === key ? { ...el, [col]: value } : el
-          )
-        );
+        dispatch(wordSlice.actions.updateWordInfo({ key, col, value }));
       }
     },
-    [dataSource]
+    [dispatch]
   );
+
+  const currentData = dataSource.map((el) => ({
+    key: el.key,
+    word: el.word,
+    transcription: el.transcription,
+    translation: el.translationes ? el.translationes[0] : null,
+  }));
 
   return (
     <div className={styles.category}>
@@ -182,7 +134,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
 
       <Table
         className={styles.table}
-        dataSource={dataSource}
+        dataSource={currentData}
         columns={columns}
         tableLayout="fixed"
       />
