@@ -6,16 +6,17 @@ import { capitalize } from "../../utils/capitalize";
 import { getImageURL } from "../../utils/getImageURL";
 import { voice } from "../../utils/voice";
 import { useAppSelector } from "../../hooks/redux-hooks";
-import { selectWords } from "../redux/wordSlice";
+import { selectCategories } from "../redux/wordSlice";
 
 import styles from "./styles.module.scss";
 
 export const WordPage: React.FC = React.memo(function WordPage() {
+  const category = useParams().name || "";
   const title = useParams().word || "";
   const [imageUrl, setImageUrl] = React.useState("");
-  const wordInfo = useAppSelector(selectWords).find(
-    (word) => word.key === title
-  );
+  const wordInfo = useAppSelector(selectCategories)
+    .find((cat) => cat.name === category)
+    ?.words.find((word) => word.key === title);
 
   const navigate = useNavigate();
 
@@ -46,7 +47,7 @@ export const WordPage: React.FC = React.memo(function WordPage() {
         <div>
           <span className={styles.rowTitle}>Перевод:</span>
           <span>
-            {wordInfo?.translationes && wordInfo.translationes.join(", ")}
+            {wordInfo?.translations && wordInfo.translations.join(", ")}
           </span>
         </div>
         <div>

@@ -8,7 +8,7 @@ import { IColKey, ICols } from "../types";
 import { capitalize } from "../../utils/capitalize";
 import { voice } from "../../utils/voice";
 import {
-  selectWords,
+  selectCategories,
   addNewWord,
   updateWord,
   wordSlice,
@@ -17,15 +17,17 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks";
 
 export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [popatTitle, setPopatTitle] = React.useState("");
+  const [popupTitle, setPopupTitle] = React.useState("");
   const inputRef = React.useRef<Input>(null);
   const navigate = useNavigate();
 
-  const title = capitalize(useParams().name || "");
+  const title = useParams().name || "";
 
   const [isEmptyValue, setIsEmptyValue] = React.useState(true);
 
-  const dataSource = useAppSelector(selectWords);
+  const dataSource = useAppSelector(selectCategories).find(
+    (cat) => cat.name === title
+  );
 
   const dispatch = useAppDispatch();
 
@@ -68,9 +70,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
         <div className={styles.word}>
           <EditableCell
             text={text}
-            getWord={(val) =>
-              handleUpdateWord(record.key, "translationes", val)
-            }
+            getWord={(val) => handleUpdateWord(record.key, "translations", val)}
           />
         </div>
       ),
@@ -80,42 +80,46 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
   const handleAddWord = React.useCallback(
     (value: string) => {
       if (value) {
-        const dataHasWord = dataSource.filter((el) => el.word === value).length;
+        const dataHasWord = dataSource?.words.filter(
+          (el) => el.word === value
+        ).length;
         if (dataHasWord) {
-          setPopatTitle("Это слово уже существует");
+          setPopupTitle("Это слово уже существует");
           inputRef.current?.setValue("");
         } else {
-          setPopatTitle("Введите слово");
-          dispatch(addNewWord(value));
+          setPopupTitle("Введите слово");
+          dispatch(addNewWord({ word: value, category: title }));
           inputRef.current?.setValue("");
         }
       }
     },
-    [dataSource, dispatch]
+    [dataSource, dispatch, title]
   );
 
   const handleUpdateWord = React.useCallback(
     (key: string, col: IColKey, value: string) => {
       if (col === "word") {
-        dispatch(updateWord({ prev: key, new: value }));
+        dispatch(updateWord({ prev: key, new: value, category: title }));
       } else {
-        dispatch(wordSlice.actions.updateWordInfo({ key, col, value }));
+        dispatch(
+          wordSlice.actions.updateWordInfo({ key, col, value, category: title })
+        );
       }
     },
-    [dispatch]
+    [dispatch, title]
   );
 
-  const currentData = dataSource.map((el) => ({
+  const currentData = dataSource?.words.map((el) => ({
     key: el.key,
     word: el.word,
     transcription: el.transcription,
-    translation: el.translationes ? el.translationes[0] : null,
+    translation: el.translations ? el.translations[0] : null,
   }));
 
   return (
     <div className={styles.category}>
       <PageHeader
-        title={title}
+        title={capitalize(title)}
         onBack={() => navigate(-1)}
         extra={[
           <Button
@@ -123,7 +127,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
             type="primary"
             onClick={() => {
               setIsModalVisible(true);
-              setPopatTitle("Введите слово");
+              setPopupTitle("Введите слово");
               requestAnimationFrame(() => inputRef.current?.input.focus());
             }}
           >
@@ -140,7 +144,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
       />
 
       <Modal
-        title={popatTitle}
+        title={popupTitle}
         visible={isModalVisible}
         cancelText="Отмена"
         onOk={() => {

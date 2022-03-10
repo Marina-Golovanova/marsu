@@ -7,7 +7,7 @@ export const getNewWord = async (value: string): Promise<IWord> => {
   if (res.def[0]) {
     const wordInfo = res.def[0];
     const transcription = wordInfo.ts || null;
-    const translationes = wordInfo.tr.map((el: any) => el.text);
+    const translations = wordInfo.tr.map((el: any) => el.text);
     const examples = wordInfo.tr
       ? wordInfo.tr[0].ex
         ? wordInfo.tr[0].ex.map((el: any) => el.text)
@@ -21,7 +21,7 @@ export const getNewWord = async (value: string): Promise<IWord> => {
       key: value,
       word: value,
       transcription,
-      translationes,
+      translations,
       examples,
       pos,
       gen,
@@ -31,7 +31,7 @@ export const getNewWord = async (value: string): Promise<IWord> => {
       key: value,
       word: value,
       transcription: null,
-      translationes: null,
+      translations: null,
       examples: null,
       pos: null,
       gen: null,

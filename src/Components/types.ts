@@ -1,4 +1,4 @@
-export type IColKey = "key" | "word" | "transcription" | "translationes";
+export type IColKey = "key" | "word" | "transcription" | "translations";
 
 export type ICols = {
   key: string;
@@ -10,7 +10,7 @@ export type ICols = {
 export type IWord = {
   key: string;
   word: string;
-  translationes: string[] | null;
+  translations: string[] | null;
   transcription: string | null;
   examples: string[] | null;
   pos: string | null;

@@ -5,6 +5,8 @@ import Meta from "antd/lib/card/Meta";
 
 import styles from "./styles.module.scss";
 import { NavLink } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/redux-hooks";
+import { wordSlice } from "../redux/wordSlice";
 
 type ICardCategoryProps = {
   name: string;
@@ -13,22 +15,29 @@ type ICardCategoryProps = {
 export const CardCategory: React.FC<ICardCategoryProps> = React.memo(
   function CardCategory(props) {
     const [isNeedEdit, setIsNeedEdit] = React.useState(false);
-    const [name, setName] = React.useState(props.name);
+    const name = props.name;
     const [isModalVisible, setIsModalVisible] = React.useState(false);
 
     const inputRef = React.useRef<Input>(null);
 
+    const dispatch = useAppDispatch();
+
     const handleBlur = React.useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newName = e.target.value;
+        const newName = e.target.value.toLowerCase();
         if (newName) {
-          setName(newName);
+          dispatch(
+            wordSlice.actions.updateCategoryName({
+              prev: name.toLowerCase(),
+              new: newName,
+            })
+          );
           setIsNeedEdit(false);
         } else {
           setIsNeedEdit(false);
         }
       },
-      []
+      [dispatch, name]
     );
 
     const handleEnterPress = React.useCallback((e: React.KeyboardEvent) => {
@@ -47,9 +56,9 @@ export const CardCategory: React.FC<ICardCategoryProps> = React.memo(
     }, []);
 
     const handleDeleteCategory = React.useCallback(() => {
-      //!!!TODO to delete category
+      dispatch(wordSlice.actions.deleteCategory(name.toLowerCase()));
       setIsModalVisible(false);
-    }, []);
+    }, [dispatch, name]);
 
     const actions = [
       <EditOutlined key="edit" onClick={handleClickEdit} />,
