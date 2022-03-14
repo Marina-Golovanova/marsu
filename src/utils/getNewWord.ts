@@ -1,6 +1,6 @@
 import { IWord } from "../Components/types";
 import { api } from "./api";
-import { getPathSpeach } from "./getPathSpeach";
+import { getPathSpeech } from "./getPathSpeech";
 
 export const getNewWord = async (value: string): Promise<IWord> => {
   const res = await api.getWordInformation(value);
@@ -13,7 +13,7 @@ export const getNewWord = async (value: string): Promise<IWord> => {
         ? wordInfo.tr[0].ex.map((el: any) => el.text)
         : null
       : null;
-    const pos = getPathSpeach(wordInfo.pos) || null;
+    const pos = getPathSpeech(wordInfo.pos) || null;
     const gen =
       wordInfo.gen === "f" ? "жен" : wordInfo.gen === "m" ? "муж" : null;
 
@@ -26,17 +26,17 @@ export const getNewWord = async (value: string): Promise<IWord> => {
       pos,
       gen,
     };
-  } else {
-    return {
-      key: value,
-      word: value,
-      transcription: null,
-      translations: null,
-      examples: null,
-      pos: null,
-      gen: null,
-    };
   }
+
+  return {
+    key: value,
+    word: value,
+    transcription: null,
+    translations: null,
+    examples: null,
+    pos: null,
+    gen: null,
+  };
 };
 
 export const getWordInformation = async (value: string) => {

@@ -3,8 +3,6 @@ import { RootState } from "./store";
 import { IColKey, IWord } from "../types";
 import { getNewWord } from "../../utils/getNewWord";
 
-// const initialState: IWord[] = [];
-// const initialState: Record<string, IWord[]> = {};
 type ICategory = {
   name: string;
   words: IWord[];
@@ -100,5 +98,9 @@ export const wordSlice = createSlice({
       });
   },
 });
+
+export const selectCategory = (state: RootState) => (name: string) => {
+  return state.words.find((cat) => cat.name === name);
+};
 
 export const selectCategories = (state: RootState) => state.words;

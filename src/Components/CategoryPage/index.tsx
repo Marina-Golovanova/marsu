@@ -8,7 +8,7 @@ import { IColKey, ICols } from "../types";
 import { capitalize } from "../../utils/capitalize";
 import { voice } from "../../utils/voice";
 import {
-  selectCategories,
+  selectCategory,
   addNewWord,
   updateWord,
   wordSlice,
@@ -25,9 +25,7 @@ export const CategoryPage: React.FC = React.memo(function CategoryPage() {
 
   const [isEmptyValue, setIsEmptyValue] = React.useState(true);
 
-  const dataSource = useAppSelector(selectCategories).find(
-    (cat) => cat.name === title
-  );
+  const dataSource = useAppSelector(selectCategory)(title);
 
   const dispatch = useAppDispatch();
 

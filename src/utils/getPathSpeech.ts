@@ -9,6 +9,6 @@ const translationPath: Record<string, string> = {
   verb: "глагол",
 };
 
-export const getPathSpeach = (value: string) => {
+export const getPathSpeech = (value: string) => {
   return translationPath[value];
 };
