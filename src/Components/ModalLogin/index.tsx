@@ -26,12 +26,16 @@ export const ModalLogin: React.FC<IModalLoginProps> = React.memo(
       required: "${label} is required!",
       types: {
         email: "${label} is not a valid!",
+        password: "'${label}' must be at least ${min} characters",
       },
     };
 
-    const onFormFinish = (data: any) => {
+    const onFormFinish = () => {
       form.submit();
-      // onOk();
+      form
+        .validateFields()
+        .then(() => onOk())
+        .catch((e) => console.log(e));
     };
 
     return (
@@ -46,7 +50,6 @@ export const ModalLogin: React.FC<IModalLoginProps> = React.memo(
           {...layout}
           name="userForm"
           validateMessages={validateMessages}
-          onFinish={() => console.log(2)}
         >
           {title === "registration" && (
             <Form.Item
@@ -80,6 +83,10 @@ export const ModalLogin: React.FC<IModalLoginProps> = React.memo(
               {
                 required: true,
                 message: "Please input your password!",
+              },
+              {
+                min: 8,
+                message: "Password must be at least 8 characters",
               },
             ]}
           >
